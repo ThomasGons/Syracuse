@@ -1,0 +1,12 @@
+altitudeMax:
+	avg: 278257
+	min: 2 (uo = 2)
+	max: 121012864 (uo = 47867)
+flightDuration:
+	avg: 99.7599
+	min: 0 (uo = 40111)
+	max: 255 (uo = 21351)
+altitudeDuration:
+	avg: 4.19752
+	min: 0 (uo = 10)
+	max: 219 (uo = 35655)
