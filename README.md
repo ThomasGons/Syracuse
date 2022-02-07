@@ -22,5 +22,5 @@ git clone git@github.com:Tucobad/Syracuse.git # ssh
 For a basic run, just run ``./syracuse.bash <bound_1> <bound_2>``.<br>
 The structure of the project is given in the manual which is accessible with the ``-m`` or ``--manual`` option.<br>
 You can even copy the manual into ``/usr/share/man/man8``to use the ``man`` command from anywhere.<br>
-Recently, the ``--color'' option has been added to change the color of the curves.
+Recently, the ``--color`` option has been added to change the color of the curves.
 The available reference colors are present in ``Config/refColors`` otherwise all hexadecimal color codes are accepted
