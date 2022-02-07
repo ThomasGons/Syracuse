@@ -13,7 +13,7 @@ int main(int argc, char **argv){
     do{
         ui = ui % 2 ? ui * 3 + 1: ui / 2;
         if (ui > uo){
-            altMax = alMax > ui ? altMax: ui;
+            altMax = altMax > ui ? altMax: ui;
             if (inAlt)
                 altDur++;
         }

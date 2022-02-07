@@ -4,7 +4,8 @@ Generate syracuse sequences between two given positive integers.
 Process this data to make useful graphs.
 
 Mandatory arguments to long options are mandatory for short options too.
-    -c, -clean          Clean up of the project all none-native file/directory will be deleted
-    -h, -help           Display this help
-    -m, -manual         Display the manual (more detailed).
-    -s, -synthesis      When finished, a summary is displayed in the terminal
+    -c, --clean          Clean up of the project all none-native file/directory will be deleted
+    -h, --help           Display this help
+    -m, --manual         Display the manual (more detailed).
+    -s, --synthesis      When finished, a summary is displayed in the terminal
+        --color          Change the color of the generated graphics curves

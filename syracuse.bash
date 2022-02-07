@@ -1,22 +1,49 @@
 #!/bin/bash
 
-sy=0
+OPT=$(getopt -o 'chms' --long 'clean,color,help,manual,synthesis')
 
-while getopts "h(help)c(clean)m(manual)s(synthesis):" opt
+sy=0
+color="#005D70"
+
+while true;
 do
-    case $opt in
-        h)
-            cat 'Config/help' ; exit
-            ;;
-        m)
-            man './Config/syracuse.8.gz'; exit
-            ;;
-        c)
-            rm -rf Data Images Synthesis exe; echo "Project has been cleaned up !"; exit
-            ;;
-        s)
+    case "$1" in
+        '-c'|'--clean')
+            rm -rf exe Data Images Synthesis
+            exit
+        ;;
+        '--color')
+            if [ ! -z $(echo $2 | grep -viP "^[\dabcdef]{6}$") ]
+            then
+                for i in $(tail -n +3 Config/refColors)
+                do
+                    if [ $2 = $i ]; then color=$2; break; fi
+                done
+                if [ $color = "#005D70" ]; then echo "Invalid color."; exit 1; fi
+            else
+                color="#$2"
+            fi    
+            shift 2
+            continue 
+        ;;
+        '-h'|'--help')
+            cat Config/help
+            exit
+        ;;
+        '-m'|'--manual')
+            man ./Config/syracuse.8.gz
+            exit
+        ;;
+        '-s'|'--synthesis')
             sy=1; shift
-            ;;
+            break
+        ;;
+        '-'|'--')
+            echo -e "Missing option. Please refer to the help or the manual."; exit 1
+        ;;
+        *)
+            if [[ $1 == *"--"* || $1 == *"-"* ]]; then echo -e "Unknown option. Please refer to the help or the manual."; exit 1; fi
+            break
     esac
 done
 
@@ -28,7 +55,7 @@ rm -f Images/*
 if [[ -e exe || syracuse.c -nt exe ]]; then gcc syracuse.c -O3 -o exe; fi
 
 
-if [ $# -ne 2 ]; then echo "This program required two terminals"; exit; fi
+if [ $# -ne 2 ]; then echo "This program required two bounds"; exit; fi
 if [ $(echo $1$2 | grep -Po "\D" | head -n 1) ]; then echo "The terminals should be positive integers"; exit; fi 
 
 echo -ne "Collecting data...\r"
@@ -60,7 +87,7 @@ do
         } else {
             set xlabel "uo"; set ylabel "${img[i]}" 
         }
-        plot "Data/${img[i]}.dat" using 1:2 with lines lt rgb "#005D70" lw 1 title "${img[i]}.dat"
+        plot "Data/${img[i]}.dat" using 1:2 with lines lt rgb "${color}" lw 1 title "${img[i]}.dat"
 EOFMarker
 done
 echo -e "\033[0;32mGraphs Created.\033[0m       "
@@ -73,7 +100,7 @@ for i in $(seq 1 3)
 do
     echo "${img[i]}:" >> $SYNTH
     NR=$(wc -l Data/${img[i]}.dat)
-    echo -ne "\tavg: " >> $SYNTH ; echo "scale=2; $(awk '{ sum += $2 } END { printf sum / NR}' Data/${img[i]}.dat)" | bc -l >> $SYNTH # average
+    echo -ne "\tavg: " >> $SYNTH ; echo "scale=2; $(awk '{ sum += $2 } END { printf sum / NR}' Data/${img[i]}.dat)" | bc -l >> $SYNTH
     UO=(`sort -g -k2 Data/${img[i]}.dat | sed -n '1p; $p' | cut -d' ' -f1`)
     MINMAX=(`sort -g -k2 Data/${img[i]}.dat | sed -n '1p; $p' | cut -d' ' -f2`)
     echo -e "\tmin: ${MINMAX[0]} (uo = ${UO[0]})" >> $SYNTH; echo -e "\tmax: ${MINMAX[1]} (uo = ${UO[1]})" >> $SYNTH
